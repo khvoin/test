@@ -1,0 +1,16 @@
+---
+- hosts: debian8
+become_method: sudo
+tasks:
+- name: remove php5.6
+apt: pkg=php5.6 state=absent
+- name: install php 7.2
+apt: pkg=php7.2 state=installed
+- name: enable mods 
+command: rm /etc/apache2/mods-enable/php5.6.conf
+commwnd: rm /etc/apache2/mods-enable/php5.6.load
+command: ln -s /etc/apache2/mods-available/php7.2.conf /etc/apache2/mods-enable/php7.2.conf
+command: ln -s /etc/apache2/mods-available/php7.2.load /etc/apache2/mods-enable/php7.2.load
+become: true 
+- name: restart apache2
+service: name=apache2 state=restarted
